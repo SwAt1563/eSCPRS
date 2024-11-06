@@ -1,6 +1,6 @@
 # eSCPRS: The State Contract and Procurement Registration System Project
 
-This project involves the **Large Purchases by the State of California** dataset and integrates multiple technologies including **FastAPI**, **Docker**, **MongoDB**, **Natural Language Processing (NLP)**, **Ollama**, **Gemme**, **Vite**, **React**, and a **Chatbot**.
+This project involves the [Large Purchases by the State of California](https://www.kaggle.com/datasets/sohier/large-purchases-by-the-state-of-ca) dataset and integrates multiple technologies including **FastAPI**, **Docker**, **MongoDB**, **Natural Language Processing (NLP)**, **Ollama**, **Gemme**, **Vite**, **React**, and a **Chatbot**.
 
 ## Getting Started
 
