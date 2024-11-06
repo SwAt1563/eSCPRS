@@ -161,4 +161,13 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# for security
 .env.dev
+
+# ignore ollama models
+.ollama/
+
+# ignore frontend packages
+node_modules/
+
+data/

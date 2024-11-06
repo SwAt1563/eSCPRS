@@ -14,7 +14,7 @@ from contextlib import asynccontextmanager
 
 
 from core.dependencies import dependencies
-from routers import *
+from routers import chats
 from core.config import settings
 
 
@@ -50,8 +50,8 @@ async def shutdown_db_client(app):
 
 tags_metadata = [
     {
-        "name": "vectorstores",
-        "description": "These Endpoints for make operations on vectorstores, by add or remove documents from it", 
+        "name": "chats",
+        "description": "Operations with chats.",
     },
 ]
 
@@ -76,7 +76,7 @@ app = FastAPI(
 
 # CORS
 origins = [
-
+    settings.FRONTEND_URL,
 ]
 
 
@@ -104,12 +104,12 @@ async def add_process_time_header(request: Request, call_next):
 
 
 
-# app.include_router(
-#     vectorstores.router,
-#     prefix="/vectorstores",
-#     tags=["vectorstores"],
-#     dependencies=[],
-# )
+app.include_router(
+    chats.router,
+    prefix="/chats",
+    tags=["chats"],
+    dependencies=[],
+)
 
 
 

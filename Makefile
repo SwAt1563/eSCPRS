@@ -4,6 +4,7 @@
 
 
 run:
+	@docker-compose -f ./docker-compose-ollama.yml --env-file .env.dev up -d
 	@docker-compose -f ./docker-compose-mongodb.yml --env-file .env.dev up -d
 	@docker-compose -f ./docker-compose.yml --env-file .env.dev up 
 
