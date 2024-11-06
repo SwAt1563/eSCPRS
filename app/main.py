@@ -18,17 +18,30 @@ from routers import *
 from core.config import settings
 
 
+# imports for the MongoDB database connection
+from motor.motor_asyncio import AsyncIOMotorClient
 
 
 
+# define a lifespan method for fastapi
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
-    # Initialization (Create resources, open connections, etc.)
- 
+    # Start the database connection
+    await startup_db_client(app)
     yield
+    # Close the database connection
+    await shutdown_db_client(app)
 
-    # Finalization (Delete resources, close connections, etc.)
+# method for start the MongoDb Connection
+async def startup_db_client(app):
+    app.mongodb_client = AsyncIOMotorClient(settings.MONGO_URL)
+    app.mongodb = app.mongodb_client.get_database(settings.MONGODB_DATABASE)
+    print("MongoDB connected.")
+
+# method to close the database connection
+async def shutdown_db_client(app):
+    app.mongodb_client.close()
+    print("Database disconnected.")
 
     
    
@@ -63,7 +76,7 @@ app = FastAPI(
 
 # CORS
 origins = [
-    settings.BACKEND_URL, # backend
+
 ]
 
 

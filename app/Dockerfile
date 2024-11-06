@@ -46,7 +46,7 @@ COPY . ${APP_DIR}
 
 # Ensure executable permissions for the scripts
 # Don't forget to remove volumes from the docker-compose file
-RUN chmod +x ${APP_DIR}/start_server.sh 
+RUN chmod +x ${APP_DIR}/start_app.sh 
 
 
 # Ensure correct permissions

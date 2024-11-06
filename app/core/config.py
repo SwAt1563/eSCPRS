@@ -12,11 +12,17 @@ class Settings(BaseSettings):
     MONGODB_HOST: str = "mongodb"
     MONGODB_USER: str 
     MONGODB_PASSWORD: str 
+    MONGODB_DATABASE: str
+
 
     # Dynamically set the environment file based on FASTAPI_ENV: this will override the upper env
     model_config = SettingsConfigDict(
         env_file=".env.dev" if os.getenv("FASTAPI_ENV", "development") == "development" else ".env.prod" 
     )
+
+    @property
+    def MONGO_URL(self) -> str:
+        return f"mongodb://{self.MONGODB_USER}:{self.MONGODB_PASSWORD}@{self.MONGODB_HOST}:{self.MONGODB_PORT}/"
 
 
 # @lru_cache

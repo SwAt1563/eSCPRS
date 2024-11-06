@@ -4,7 +4,8 @@
 
 
 run:
-	@docker-compose -f ./docker-compose.yml --env-file ./.env.dev up 
+	@docker-compose -f ./docker-compose-mongodb.yml --env-file .env.dev up -d
+	@docker-compose -f ./docker-compose.yml --env-file .env.dev up 
 
 
 # To avoid line ending conversion on windows
