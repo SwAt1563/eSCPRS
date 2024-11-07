@@ -67,7 +67,7 @@ app = FastAPI(
     description=description, 
     version="0.0.1", 
     openapi_tags=tags_metadata, 
-    contact={"name": "GenAI", "url": "https://genai.ai", 'email': "qutaiba@sight.dev"}, 
+    contact={"name": "GenAI", "url": "https://genai.ai", 'email': "qutaibaolayyan@gmail.com"}, 
     license_info={"name": "MIT", "url": "https://opensource.org/licenses/MIT"}
 )
 
@@ -77,6 +77,7 @@ app = FastAPI(
 # CORS
 origins = [
     settings.FRONTEND_URL,
+  
 ]
 
 

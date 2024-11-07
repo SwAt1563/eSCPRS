@@ -7,7 +7,8 @@ import os
 
 
 class Settings(BaseSettings):
-    FASTAPI_ENV: str = "production"
+    FASTAPI_ENV: str = "development"
+    FRONTEND_URL: str = "http://localhost:3000"
 
     MONGODB_PORT: int = 27017
     MONGODB_HOST: str = "mongodb" # This should match the service name in Docker Compose or the hostname of your mongodb service

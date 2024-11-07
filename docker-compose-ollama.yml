@@ -14,15 +14,15 @@ services:
       - ./ollama/start_ollama.sh:/ollama/start_ollama.sh
       - ./ollama/.ollama:/root/.ollama
     environment:
-      - OLLAMA_ENV: ${OLLAMA_ENV}
-      - NVIDIA_VISIBLE_DEVICES: all
-      - NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
-      - OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE} # 24 hours if not any request then stop, if new request then start again
-      - OLLAMA_LOAD_TIMEOUT: ${OLLAMA_LOAD_TIMEOUT} 
-      - OLLAMA_GPU_DEVICES: all
-      - OLLAMA_USE_GPU: true
-      - OLLAMA_MAX_QUEUE: ${OLLAMA_MAX_QUEUE} # Maximum number of requests in queue
-      - OLLAMA_NUM_PARALLEL: ${OLLAMA_NUM_PARALLEL} # Number of parallel requests
+      OLLAMA_ENV: ${OLLAMA_ENV}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE} # 24 hours if not any request then stop, if new request then start again
+      OLLAMA_LOAD_TIMEOUT: ${OLLAMA_LOAD_TIMEOUT} 
+      OLLAMA_GPU_DEVICES: all
+      OLLAMA_USE_GPU: true
+      OLLAMA_MAX_QUEUE: ${OLLAMA_MAX_QUEUE} # Maximum number of requests in queue
+      OLLAMA_NUM_PARALLEL: ${OLLAMA_NUM_PARALLEL} # Number of parallel requests
     restart: always
     networks:
       - external_network

@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from core.ollama import get_ollama_chat
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from services.chatbots import  get_database_chat_template
-
+import json
 
 router = APIRouter()
 
@@ -36,7 +36,7 @@ router = APIRouter()
 
 
 # Endpoint for WebSocket connection
-@router.websocket("/ws/chats")
+@router.websocket("/ask")
 async def websocket_endpoint(websocket: WebSocket):
     # Accept the WebSocket connection
     await websocket.accept()
@@ -45,7 +45,11 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             # Receive a message from the WebSocket client
             message = await websocket.receive_text()
-
-            await websocket.send_text(message)
+            message = json.loads(message)
+            question = message['question']
+            answer = question
+            response = json.dumps({"answer": answer})
+            await websocket.send_text(response)
     except WebSocketDisconnect:
         pass
+
