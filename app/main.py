@@ -20,22 +20,29 @@ from core.config import settings
 
 # imports for the MongoDB database connection
 from motor.motor_asyncio import AsyncIOMotorClient
+from beanie import init_beanie
+from schemas.documents import Purchase
+from seeds.purchases import seed_data
 
 
-
-# define a lifespan method for fastapi
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Start the database connection
-    await startup_db_client(app)
-    yield
-    # Close the database connection
-    await shutdown_db_client(app)
+# TODO: the ai assassment need to answer questions not just this project, be carful
 
 # method for start the MongoDb Connection
 async def startup_db_client(app):
     app.mongodb_client = AsyncIOMotorClient(settings.MONGO_URL)
     app.mongodb = app.mongodb_client.get_database(settings.MONGODB_DATABASE)
+
+    # Initialize beanie with the Purchase document class
+    await init_beanie(database=app.mongodb, document_models=[Purchase])
+
+    # Check if the collection is empty, then seed it
+    collection = app.mongodb["purchases"]
+    count = await collection.count_documents({})
+    
+    # Seed the data if the collection is empty
+    if count == 0:
+        await seed_data() 
+
     print("MongoDB connected.")
 
 # method to close the database connection
@@ -45,6 +52,14 @@ async def shutdown_db_client(app):
 
     
    
+# define a lifespan method for fastapi
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Start the database connection
+    await startup_db_client(app)
+    yield
+    # Close the database connection
+    await shutdown_db_client(app)
 
 
 

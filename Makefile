@@ -1,5 +1,5 @@
 
-.PHONY: run config push pull
+.PHONY: run config push pull install
 
 
 
@@ -24,3 +24,23 @@ push:
 
 pull:
 	@git pull
+
+
+install i:
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+	  echo "Usage: make $@ <library_name>"; \
+	  exit 1; \
+	fi
+
+#	put / at the end of each line here imporant to save the library version varaible and use it with other commands
+
+	@for lib_name in $(filter-out $@,$(MAKECMDGOALS)); do \
+	  pip install $$lib_name; \
+	  LIB_VERSION=$$(pip show $$lib_name | grep Version | awk '{print $$2}'); \
+	  if [ -z "$$LIB_VERSION" ]; then \
+	    echo "Failed to install $$lib_name"; \
+	    exit 1; \
+	  fi; \
+	  echo "$$lib_name==$$LIB_VERSION" >> requirements.txt; \
+	  echo "$$lib_name added to requirements.txt"; \
+	done

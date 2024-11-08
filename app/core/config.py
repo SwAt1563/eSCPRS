@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
-
+from pathlib import Path
 
 
 
@@ -38,6 +38,10 @@ class Settings(BaseSettings):
     @property
     def MONGO_URL(self) -> str:
         return f"mongodb://{self.MONGODB_USER}:{self.MONGODB_PASSWORD}@{self.MONGODB_HOST}:{self.MONGODB_PORT}/"
+    
+    @property
+    def ROOT_PATH(self) -> Path:
+        return Path(__file__).parent.parent  # Get the parent directory of the current file
 
 
 # @lru_cache

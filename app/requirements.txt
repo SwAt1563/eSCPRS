@@ -33,3 +33,4 @@ python-dotenv==1.0.1
 # MongoDB
 motor==3.6.0
 beanie==1.27.0
+pymongo==2.7.0
