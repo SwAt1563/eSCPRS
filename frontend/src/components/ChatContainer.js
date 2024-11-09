@@ -14,6 +14,7 @@ function ChatContainer() {
     setChatValue,
     handleSend,
     handleKeyPress,
+    isLoading,
   } = useContext(ContextApp);
 
   return (
@@ -50,6 +51,8 @@ function ChatContainer() {
             value={chatValue}
             onChange={(e) => setChatValue(e.target.value)}
             onKeyUp={handleKeyPress}
+            disabled={isLoading}
+
           />
           <RiSendPlane2Fill
             title="send message"

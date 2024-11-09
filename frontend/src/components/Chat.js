@@ -19,12 +19,16 @@ function Chat() {
             }`}
           >
             {msg.isBot && (
-              <a href="https://www.youtube.com/@SwAt1563" target="_blank" rel="noopener noreferrer">
-              <img
-                src="/icon.png"
-                alt="bot"
-                className="w-10 h-10 rounded-full object-cover self-start"
-              />
+              <a
+                href="https://www.youtube.com/@SwAt1563"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src="/icon.png"
+                  alt="bot"
+                  className="w-10 h-10 rounded-full object-cover self-start"
+                />
               </a>
             )}
             <p className="text-white text-[15px]">
@@ -41,12 +45,16 @@ function Chat() {
         {/* Loading message */}
         {isLoading && (
           <span className="flex items-start justify-center gap-2 lg:gap-5 my-2 bg-gray-700 p-3 rounded-md">
-            <a href="https://www.youtube.com/@SwAt1563" target="_blank" rel="noopener noreferrer">
-            <img
-              src="/icon.png"
-              alt="bot"
-              className="w-10 h-10 rounded-full object-cover"
-            />
+            <a
+              href="https://www.youtube.com/@SwAt1563"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/icon.png"
+                alt="bot"
+                className="w-10 h-10 rounded-full object-cover"
+              />
             </a>
             <p className="text-white text-[15px] flex items-center">
               <span className="typing-dots">.</span>

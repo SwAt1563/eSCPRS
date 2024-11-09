@@ -1,6 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
-from typing import Optional, List, Tuple, Dict
+from typing import Optional, List, Tuple, Dict, Callable
 from enum import Enum
 
 from schemas.documents import Purchase, FiscalYearEnum, AcquisitionTypeEnum
@@ -329,3 +329,36 @@ async def get_top_suppliers_by_purchase_count(top_n: int = 5) -> List[Dict]:
 
     # Return the result
     return result
+
+
+
+# Create a dictionary to map function numbers to actual functions
+function_map: Dict[int, Callable] = {
+    1: count_purchases_in_geographic_area,
+    2: count_purchases_in_purchase_date_range,
+    3: get_top_spending_items_by_year,
+    4: count_records_by_acquisition_type,
+    5: get_total_quantity_by_item_name,
+    6: get_items_by_purchase_date,
+    7: get_family_codes_by_segment_code,
+    8: get_top_normalized_UNSPSC,
+    9: get_top_item_by_total_price,
+    10: get_top_departments,
+    11: get_top_suppliers_by_purchase_count
+}
+
+# Function to invoke a function based on function number and parameters
+async def invoke_function(function_data: dict):
+    # Extract function number and parameters
+    function_number = function_data.get("function_number")
+    parameters = function_data.get("parameters", {})
+
+    # Get the function from the mapping
+    function_to_invoke = function_map.get(function_number)
+
+    if function_to_invoke:
+        # Dynamically call the function with the parameters
+        result = await function_to_invoke(**parameters)
+        return {'function_name': function_to_invoke.__name__, 'result': result}
+    
+    return 'Your query is not clear. Please write vaild question.'

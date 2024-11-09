@@ -75,15 +75,17 @@ const AppContext = ({ children }) => {
   };
 
   const handleSend = async () => {
-    const text = chatValue;
-    setChatValue("");
-    setMessage([...message, { text, isBot: false }]);
-    sendMsgToSocket(text); // Send to WebSocket instead of API
+    if (!isLoading) {
+      const text = chatValue;
+      setChatValue("");
+      setMessage([...message, { text, isBot: false }]);
+      sendMsgToSocket(text); // Send to WebSocket instead of API
+    }
   };
 
   // Enter Click function
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey) {
       handleSend();
     }
   };
