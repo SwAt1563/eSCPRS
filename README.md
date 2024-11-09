@@ -1,4 +1,4 @@
-# eSCPRS: The State Contract and Procurement Registration System Project
+# [eSCPRS](https://drive.google.com/file/d/1-rdujgzhyd3REjeLH5ACr6AjoQR-oFDC/view?usp=sharing): The State Contract and Procurement Registration System Project
 
 The **eSCPRS** (State Contract and Procurement Registration System) project is a comprehensive solution designed for processing large-scale procurement data from the State of California. The project leverages a variety of technologies, including **FastAPI**, **ReactJS**, **MongoDB**, **Docker**, **Ollama** (to run Gemma2 LLM), and **Power BI**, to build a scalable, efficient, and user-friendly system. This README provides an overview of the project's setup, features, and my contributions.
 
