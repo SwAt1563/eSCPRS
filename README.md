@@ -48,7 +48,7 @@ Follow the instructions below to set up and run the eSCPRS project on your local
 Begin by cloning the repository with the following command:
 
 ```bash
-git clone https://github.com/SwAt1563/Large-Purchases-by-the-State-of-CA.git
+git clone https://github.com/SwAt1563/eSCPRS.git
 ```
 
 ### 2. Navigate to the Project Directory
@@ -56,7 +56,7 @@ git clone https://github.com/SwAt1563/Large-Purchases-by-the-State-of-CA.git
 After cloning the repository, change into the project directory:
 
 ```bash
-cd Large-Purchases-by-the-State-of-CA
+cd eSCPRS
 ```
 
 ### 3. Configure Git Line Ending Behavior
