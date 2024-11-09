@@ -97,7 +97,7 @@ To set up the required network, run the appropriate script based on your operati
   ./create_network.sh
   ```
 
-### 7. Running the Project
+### 7. Running the Server
 
 Once the network is set up, you can start the project by running:
 
@@ -107,7 +107,14 @@ make run
 
 This command will initiate the services and run the application.
 
-### 8. Pushing Changes to the Current Branch
+### 8. Running the Frontend
+
+```bash
+cd frontend
+npm run start
+```
+
+### 9. Pushing Changes to the Current Branch
 
 To push your changes to the current branch, use the following command:
 
