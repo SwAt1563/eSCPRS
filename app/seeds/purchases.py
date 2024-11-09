@@ -1,6 +1,7 @@
-from schemas.documents import Purchase
 import json
+
 from core.config import settings
+from schemas.documents import Purchase
 
 
 # Method to seed the collection if it's empty

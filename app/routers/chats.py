@@ -1,18 +1,45 @@
-from fastapi import APIRouter, Query, Path, Body, Cookie, Header, Response, status, HTTPException, Depends, Request, BackgroundTasks, WebSocket, WebSocketDisconnect
-from typing import Annotated, Any, List, Union
-from fastapi.encoders import jsonable_encoder
-from core.ollama import get_ollama_chat
-from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
-from services.chatbots import  get_database_chat_template, get_readme_template
 import json
+
+from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
+from langchain_core.output_parsers import JsonOutputParser
+
+from core.ollama import get_ollama_chat
+from services.chatbots import get_database_chat_template, get_readme_template
 from services.queries import invoke_function
 
 router = APIRouter()
 
 
+@router.post("/stage1")
+async def stage1(question: str):
+    # Initialize the chat model and parser
+    llm_chat = get_ollama_chat(temperature=0.0)
+    prompt = get_database_chat_template()
+    parser = JsonOutputParser()
+    prompt = prompt.partial(format_instructions=parser.get_format_instructions())
 
-@router.post("/ask")
-async def database_chat(question: str):
+    # Create the chain for processing the question
+    chain = prompt | llm_chat | parser
+
+    try:
+        # Get the function response, which should be an integer
+        response = await chain.ainvoke({'question': question})
+    except Exception as e:
+        # Log and raise an HTTP exception if there is an issue in the chain
+        raise HTTPException(status_code=500, detail=f"Error invoking database chain: {str(e)}")
+
+    try:
+        # Call the function with the response from the previous chain
+        database_response = await invoke_function(response)
+    except Exception as e:
+        # Log and raise an HTTP exception if there is an issue with invoking the function
+        raise HTTPException(status_code=500, detail=f"Error invoking function with response: {str(e)}")
+
+    return {'response': response, 'database_response': database_response}
+
+
+@router.post("/stage2")
+async def stage2(question: str):
     # Initialize the chat model and parser
     llm_chat = get_ollama_chat(temperature=0.0)
     prompt = get_database_chat_template()
@@ -50,6 +77,7 @@ async def database_chat(question: str):
 
     # Return the final answer
     return {"answer": answer}
+
 
 
 @router.websocket("/ask")

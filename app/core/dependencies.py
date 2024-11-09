@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Header, HTTPException, Depends
+from fastapi import Depends, Header, HTTPException
 
 
 async def get_token_header(x_token: Annotated[str | None, Header()] = None):

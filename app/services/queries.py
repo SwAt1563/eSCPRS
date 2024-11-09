@@ -1,10 +1,10 @@
 from datetime import datetime
-from pydantic import BaseModel, Field
-from typing import Optional, List, Tuple, Dict, Callable
-from enum import Enum
+from typing import Callable, Dict, List, Tuple
 
-from schemas.documents import Purchase, FiscalYearEnum, AcquisitionTypeEnum
 from pymongo import DESCENDING
+
+from schemas.documents import AcquisitionTypeEnum, FiscalYearEnum, Purchase
+
 
 async def count_purchases_in_geographic_area(
     top_left: Tuple[float, float],

@@ -1,9 +1,7 @@
 # from langchain_community.chat_models import ChatOllama
 from langchain_ollama import ChatOllama
+
 from .config import settings
-
-
-
 
 
 # support await for chat

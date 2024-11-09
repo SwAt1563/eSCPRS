@@ -1,11 +1,10 @@
-from enum import Enum
-from langchain_core.prompts import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate
-)
 from datetime import datetime
-from templates.chatbot import DATABASE_SYSTEM_TEMPLATE, README_TEMPLATE
+from enum import Enum
 
+from langchain_core.prompts import (ChatPromptTemplate,
+                                    SystemMessagePromptTemplate)
+
+from templates.chatbot import DATABASE_SYSTEM_TEMPLATE, README_TEMPLATE
 
 
 def get_database_chat_template() -> ChatPromptTemplate:

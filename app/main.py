@@ -1,31 +1,18 @@
-from fastapi import FastAPI, Query, Path, Body, Cookie, Header, Response, status, Form, File, UploadFile, HTTPException, Depends, Request, BackgroundTasks
-from fastapi.responses import RedirectResponse, ORJSONResponse
-from fastapi.encoders import jsonable_encoder
-from enum import Enum
-from pydantic import BaseModel, Field, HttpUrl, EmailStr
-from typing import Annotated, Any
-from datetime import datetime, time, timedelta
-from uuid import UUID
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
-
 from contextlib import asynccontextmanager
 
+from beanie import init_beanie
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import ORJSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
+from motor.motor_asyncio import AsyncIOMotorClient
 
+from core.config import settings
 from core.dependencies import dependencies
 from routers import chats
-from core.config import settings
-
-
-# imports for the MongoDB database connection
-from motor.motor_asyncio import AsyncIOMotorClient
-from beanie import init_beanie
 from schemas.documents import Purchase
 from seeds.purchases import seed_data
 
-
-# TODO: the ai assassment need to answer questions not just this project, be carful
 
 # method for start the MongoDb Connection
 async def startup_db_client(app):
@@ -65,24 +52,24 @@ async def lifespan(app: FastAPI):
 
 tags_metadata = [
     {
-        "name": "chats",
-        "description": "Operations with chats.",
+        "name": "eSCPRS Chatbot",
+        "description": "Operations related to the eSCPRS Chatbot.",
     },
 ]
 
 description = """
-# GenAI APIs
+# eSCPRS Chatbot APIs Documentation
 
 """
 app = FastAPI(
     lifespan=lifespan, 
-    dependencies=dependencies, # global dependencies | not matter what this function return, just what he did with its dependencies
+    dependencies=dependencies,
     default_response_class=ORJSONResponse,
-    title="GenAI APIs", 
+    title="eSCPRS", 
     description=description, 
     version="0.0.1", 
     openapi_tags=tags_metadata, 
-    contact={"name": "GenAI", "url": "https://genai.ai", 'email': "qutaibaolayyan@gmail.com"}, 
+    contact={"name": "Qutaiba Olayyan", "url": "https://www.linkedin.com/in/qutaiba-olayyan/", 'email': "qutaibaolayyan@gmail.com"}, 
     license_info={"name": "MIT", "url": "https://opensource.org/licenses/MIT"}
 )
 
@@ -92,7 +79,6 @@ app = FastAPI(
 # CORS
 origins = [
     settings.FRONTEND_URL,
-  
 ]
 
 

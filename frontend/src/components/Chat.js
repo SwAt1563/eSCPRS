@@ -7,12 +7,12 @@ import rehypeHighlight from "rehype-highlight";
 function Chat() {
   const { message, msgEnd, isLoading } = useContext(ContextApp);
   return (
-    <div className="w-full h-[85%] flex items-center justify-center overflow-hidden overflow-y-auto px-2 py-1 scroll">
-      <div className="w-full lg:w-4/5 flex flex-col h-full items-start justify-start">
+    <div className="w-full h-[85%] flex items-center justify-center overflow-hidden overflow-y-auto px-2 py-1 scroll ">
+      <div className="w-full lg:w-4/5 flex flex-col h-full items-start justify-start ">
         {message?.map((msg, i) => (
-          <span
+          <div
             key={i}
-            className={`flex items-start gap-2 lg:gap-5 my-2 p-3 rounded-md ${
+            className={`flex items-start gap-2 lg:gap-5 my-2 p-3 rounded-md max-w-full lg:max-w-[90%]  ${
               msg.isBot
                 ? "bg-gray-800/80 text-left self-start"
                 : "bg-blue-600 text-left self-end"
@@ -31,20 +31,19 @@ function Chat() {
                 />
               </a>
             )}
-            <p className="text-white text-[15px]">
-              <Markdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]}
-              >
-                {msg?.text}
-              </Markdown>
-            </p>
-          </span>
+            <Markdown
+              className="text-white text-[15px] max-w-full !whitespace-pre-wrap overflow-auto"
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
+            >
+              {msg?.text}
+            </Markdown>
+          </div>
         ))}
 
         {/* Loading message */}
         {isLoading && (
-          <span className="flex items-start justify-center gap-2 lg:gap-5 my-2 bg-gray-700 p-3 rounded-md">
+          <div className="flex items-start justify-center gap-2 lg:gap-5 my-2 bg-gray-700 p-3 rounded-md">
             <a
               href="https://www.youtube.com/@SwAt1563"
               target="_blank"
@@ -61,7 +60,7 @@ function Chat() {
               <span className="typing-dots">.</span>
               <span className="typing-dots">.</span>
             </p>
-          </span>
+          </div>
         )}
 
         <div ref={msgEnd} />
