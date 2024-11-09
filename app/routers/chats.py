@@ -35,6 +35,15 @@ router = APIRouter()
 #     return Message(content=answer, role=MessageRole.AI, type=MessageType.DATABASE)
 
 
+from services.queries import  get_top_item_by_total_price
+from schemas.documents import FiscalYearEnum
+
+@router.post("/ask")
+async def ask():
+
+
+    return {"answer": "ss"}
+
 # Endpoint for WebSocket connection
 @router.websocket("/ask")
 async def websocket_endpoint(websocket: WebSocket):

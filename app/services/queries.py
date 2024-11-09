@@ -1,12 +1,10 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 from typing import Optional, List, Tuple, Dict
-from beanie import Document
 from enum import Enum
 
 from schemas.documents import Purchase, FiscalYearEnum, AcquisitionTypeEnum
 from pymongo import DESCENDING
-
 
 async def count_purchases_in_geographic_area(
     top_left: Tuple[float, float],
@@ -28,12 +26,10 @@ async def count_purchases_in_geographic_area(
 
     
     count = await Purchase.find(
-        {
-            Purchase.location_lat <= left_lat,
-            Purchase.location_lat >= right_lat,
-            Purchase.location_long >= left_long,
-            Purchase.location_long <= right_long
-        }
+        Purchase.location_lat <= left_lat,
+        Purchase.location_lat >= right_lat,
+        Purchase.location_long >= left_long,
+        Purchase.location_long <= right_long
     ).count()
     
     return count
@@ -111,9 +107,9 @@ async def count_records_by_acquisition_type(acquisition_type: AcquisitionTypeEnu
         int: Number of records with the specified acquisition type.
     """
     count = await Purchase.find(
-        {
-            Purchase.acquisition_type == acquisition_type
-        }
+      
+        Purchase.acquisition_type == acquisition_type
+       
     ).count()
     
     return count
@@ -188,8 +184,8 @@ async def get_items_by_purchase_date(date: str) -> List[str]:
     
     return item_names
 
-
 async def get_family_codes_by_segment_code(segment_code: int) -> List[int]:
+
     """
     Get all unique family codes for a specific segment code.
 
@@ -201,21 +197,22 @@ async def get_family_codes_by_segment_code(segment_code: int) -> List[int]:
     """
     # MongoDB aggregation pipeline
     pipeline = [
-        {"$match": {"segment_code": segment_code}},  # Filter by segment_code
+        {"$match": {"segment": segment_code}},  # Filter by segment_code
         {"$group": {
-            "_id": "$family_code"  # Group by family_code
+            "_id": "$family"  # Group by family_code
         }},
         {"$project": {
             "_id": 0,  # Exclude _id field
-            "family_code": "$_id"  # Include family_code
+            "family": "$_id"  # Include family_code
         }}
     ]
+
     
     # Run the aggregation pipeline
     result = await Purchase.aggregate(pipeline).to_list(length=None)
 
     # Extract family codes from the result
-    family_codes = [doc['family_code'] for doc in result]
+    family_codes = [doc['family'] for doc in result]
     
     return family_codes
 
@@ -240,36 +237,35 @@ async def get_top_normalized_UNSPSC() -> List[Dict]:
     return result
 
 
-async def get_items_by_unit_price(price: float, less_than: bool = True) -> List[Dict]:
+async def get_top_item_by_total_price(fiscal_year: FiscalYearEnum) -> Dict:
     """
-    Get the item names where the unit price is either less than or greater than a specified price.
+    Get the item name with the highest total price for a specific fiscal year.
 
     Args:
-        price (float): The price to compare against.
-        less_than (bool): If True, return items with unit price less than the specified price. If False, return items with unit price greater than the specified price.
+        fiscal_year (FiscalYearEnum): The fiscal year to filter by.
 
     Returns:
-        List[Dict]: A list of dictionaries with item names and their respective unit prices.
+        Dict: A dictionary containing the item name and the total price.
     """
-    # Determine the price condition for the match stage
-    price_condition = {"$lt": price} if less_than else {"$gt": price}
-
     # MongoDB aggregation pipeline
     pipeline = [
-        {"$match": {"unit_price": price_condition}},  # Filter items based on unit price condition
+        {"$match": {"fiscal_year": fiscal_year}},  # Filter by fiscal year
         {"$group": {
             "_id": "$item_name",  # Group by item_name
-            "unit_price": {"$first": "$unit_price"}  # Get the unit price of the item
+            "total_price": {"$sum": "$total_price"}  # Sum the total price for each item
         }},
+        {"$sort": {"total_price": -1}},  # Sort by total_price in descending order
+        {"$limit": 5},  # Limit to the top item
         {"$project": {
             "_id": 0,  # Exclude the _id field
             "item_name": "$_id",  # Include the item_name
-            "unit_price": 1  # Include the unit price
+            "total_price": 1  # Include the total price
         }}
     ]
     
     # Run the aggregation pipeline
-    result = await Purchase.aggregate(pipeline).to_list()  # Assuming you're using Beanie
+    result = await Purchase.aggregate(pipeline).to_list(length=5)
+
     return result
 
 
@@ -297,4 +293,39 @@ async def get_top_departments() -> List[Dict]:
     
     # Run the aggregation pipeline
     result = await Purchase.aggregate(pipeline).to_list(length=10)  # Assuming you're using Beanie
+    return result
+
+async def get_top_suppliers_by_purchase_count(top_n: int = 5) -> List[Dict]:
+    """
+    Get the top suppliers based on the number of purchases across all fiscal years.
+
+    Args:
+        top_n (int): The number of top suppliers to return.
+
+    Returns:
+        List[Dict]: A list of dictionaries containing supplier name, zip code, and the count of purchases.
+    """
+    # MongoDB aggregation pipeline
+    pipeline = [
+        {"$group": {
+            "_id": {
+                "supplier_name": "$supplier_name",  # Group by supplier_name
+                "supplier_zip": "$supplier_zip_code"  # Group by supplier_zip_code
+            },
+            "purchase_count": {"$sum": 1}  # Count the number of purchases for each supplier
+        }},
+        {"$sort": {"purchase_count": -1}},  # Sort by purchase_count in descending order
+        {"$limit": top_n},  # Limit the result to the top 'n' suppliers
+        {"$project": {
+            "_id": 0,  # Exclude the _id field
+            "supplier_name": "$_id.supplier_name",  # Include supplier_name
+            "supplier_zip_code": "$_id.supplier_zip",  # Include supplier_zip_code
+            "purchase_count": 1  # Include the count of purchases
+        }}
+    ]
+    
+    # Run the aggregation pipeline
+    result = await Purchase.aggregate(pipeline).to_list(length=top_n)
+
+    # Return the result
     return result

@@ -1,9 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from beanie import Document
 from enum import Enum
-
+import pymongo
 
 # Define an Enum for Fiscal Year
 class FiscalYearEnum(str, Enum):
@@ -57,3 +57,21 @@ class Purchase(Document):
 
     class Settings:
         name = "purchases"
+        use_cache = True
+        cache_expiration_time = timedelta(seconds=30)
+        cache_capacity = 5
+        indexes = [
+            'fiscal_year',
+            'acquisition_type',
+            'item_name',
+            'purchase_date',
+            'segment_code',
+            pymongo.IndexModel(
+                [("supplier_name", pymongo.ASCENDING), ("supplier_zip_code", pymongo.ASCENDING)],
+                name="supplier_name_supplier_zip_code_index",
+            ),
+            pymongo.IndexModel(
+                [("location_lat", pymongo.ASCENDING), ("location_long", pymongo.ASCENDING)],
+                name="location_lat_location_long_index",
+            ),
+        ]
