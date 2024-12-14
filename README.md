@@ -4,6 +4,8 @@ The **eSCPRS** (State Contract and Procurement Registration System) project is a
 
 The project utilizes the [Large Purchases by the State of California](https://www.kaggle.com/datasets/sohier/large-purchases-by-the-state-of-ca) dataset to manage and query data for procurement analysis.
 
+[Video](https://drive.google.com/file/d/1hE8S85OfTfyiiTV44jf9i1xXCl0g1QHE/view?usp=sharing)
+
 ## My Contributions and Features
 
 In this project, I took on several key roles to ensure the successful development and deployment of the eSCPRS system. Here’s a summary of what I accomplished:
